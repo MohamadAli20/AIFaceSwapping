@@ -10,35 +10,33 @@ from datetime import datetime
 import os
 
 # Flask constructor
-
 # Mention custom folder name
-# app = Flask(__name__, template_folder='templates', static_folder='static')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
-# @app.route('/', methods =["GET", "POST"])
-# def file_path():
-#     global image_path, video_path
-#     if request.method == "POST":
-#        # getting input with name = image-path in HTML form
-#        image_path = request.form.get("image-path")
-#        # getting input with name = video-path in HTML form
-#        video_path = request.form.get("video-path")
-#     #    return "Your name is " + video_path + "  "  + image_path # test if it returns the paths
+@app.route('/', methods =["GET", "POST"])
+def file_path():
+    global image_path, video_path # set to global to access from outside
 
-#     return render_template("main.html")
- 
-# if __name__=='__main__':
-#    app.run(debug=True)
+    if request.method == "POST":
+       # getting input with name = image-path in HTML form
+       image_path = request.form.get("image-path")
+       # getting input with name = video-path in HTML form
+       video_path = request.form.get("video-path")
+       return "Image path: " + image_path + " Video path: "  + video_path # test if it returns the paths
+
+    return render_template("main.html")
+
+if __name__=='__main__':
+   app.run(debug=True)
 
 #call the file_path() to access the global variable inside of it
-# file_path()
-# abs_path_image = image_path
-# abs_path_video = video_path
-# print(abs_path_image)
-# print(abs_path_video)
+file_path(filename="test.mp4")
+abs_path_image = image_path
+abs_path_video = video_path
 
 #testing remove this after
-abs_path_image = "C:/Users/LIM/Desktop/AI ECard/static/barak1.png"
-abs_path_video = "C:/Users/LIM/Desktop/AI ECard/static/Teacher.mov"
+# abs_path_image = "C:/Users/LIM/Desktop/AI ECard/static/barak1.png"
+# abs_path_video = "C:/Users/LIM/Desktop/AI ECard/static/Teacher.mov"
 
 # Load the input image for face swapping
 input_image = cv2.imread(abs_path_image, -1)
@@ -245,8 +243,6 @@ def save_button_clicked():
         output_video.release()
         generated_frames.clear()
 
-       
-
         # Show a success message box
         success_message = f"Video successfully saved as '{output_filename}'"
         messagebox.showinfo("Save Successful", success_message)
@@ -255,7 +251,12 @@ def save_button_clicked():
         populate_column_bar()
 
         #debug , remove this after testing
-        print(output_filename)
+        print(output_filename) # this is the name of generated video
+        return output_filename
+
+# Im trying here to pass the output_filename from the above function and store to a variable, hoping it could access by file_path() above
+# final_filename = save_button_clicked() # store to a variable the value return by save_button_clicked function
+# file_path(final_filename) 
 
 # Generate button click handler
 def generate_button_clicked():
@@ -323,3 +324,4 @@ populate_column_bar()
 
 # Run the main event loop
 root.mainloop()
+
